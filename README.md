@@ -1,28 +1,27 @@
 # NoShutter
 
-Android のカメラ「シャッター音」を無効化する設定変更ツール(Kotlin / Compose, minSdk 33)。
+日本などで強制されるカメラのシャッター音を、root なしで無効化するツール(Kotlin, minSdk 33)。
 
-## 仕組み
-メーカー独自の「シャッター音を強制する」設定値を `WRITE_SECURE_SETTINGS` で書き換えます。
-機種ごとの設定キーは [`app/src/main/assets/profiles.json`](app/src/main/assets/profiles.json) に定義します。
+## 方式
+shell 権限(`MODIFY_AUDIO_ROUTING` を持つ)で `AudioSystem.setForceUse(FOR_SYSTEM, FORCE_NONE)` を呼び、
+音声ポリシーの「シャッター音強制」を解除します。メーカー固有の設定キーは使いません。
+変更は audioserver に残り、再起動で元に戻ります。アンインストールでは戻らないので、先に「元に戻す」を実行してください。
 
-## セットアップ(一度だけ)
-次のどちらかで権限を付与します。
-- PC: `adb shell pm grant dev.noshutter android.permission.WRITE_SECURE_SETTINGS`
-- 端末のみ: [Shizuku](https://shizuku.rikka.app/) を起動し、アプリの「Shizukuで付与」を押す
+## ロードマップ
+1. **(今ここ)** PC の adb から `app_process` で実行して、実機で音が消えることを確認
+2. アプリ内蔵の ADB クライアント(ワイヤレスデバッグ)で、PC・Shizuku なしで実行
+3. 起動時の自動再適用、機種別の動作報告表
 
-## 対応状況
-| メーカー | 状態 |
-|---|---|
-| Samsung Galaxy | 未検証(キー: `csc_pref_camera_forced_shuttersound_key`) |
-| Pixel / OPPO / Xiaomi / Motorola / FCNT ほか | プロファイル募集中 |
+## マイルストーン1の試し方
+```sh
+adb install app-debug.apk
+adb shell 'CLASSPATH=$(pm path dev.noshutter | cut -d: -f2) app_process /system/bin dev.noshutter.ShellMain mute'
+adb shell 'CLASSPATH=$(pm path dev.noshutter | cut -d: -f2) app_process /system/bin dev.noshutter.ShellMain restore'
+```
+`FOR_SYSTEM=0` なら強制解除、`11` なら強制中です。ColorOS(OPPO/OnePlus/realme)は、開発者オプションの「権限監視を無効にする」が必要な場合があります。
 
-地域・機種によっては設定値では消せない場合があります(その場合は無効化に失敗と表示されます)。
-
-## 新しい機種を追加するには
-1. アプリの「探索」(Shizuku必須)でカメラ音関連のキーを一覧する
-2. 値を切り替えて実機で音が消えることを確認
-3. `profiles.json` にエントリを追加して PR(`verified: true` は実機確認後のみ)
+## 謝辞
+同じ方式を実装している [soralis0912/ShutterSoundToggle](https://github.com/soralis0912/ShutterSoundToggle)(NYSL)を参考にしています。
 
 ## 注意
-無断撮影・盗撮防止の観点で、シャッター音の無効化が法令や規約に抵触する地域があります。自己責任で利用してください。
+無断撮影・盗撮防止の観点で、法令や規約に抵触する地域があります。自己責任で利用してください。

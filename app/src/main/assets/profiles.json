@@ -1,0 +1,14 @@
+{
+  "_comment": "Device profiles. 'match' fields are lowercase substrings of Build.MANUFACTURER / BRAND / MODEL; empty = any. Add entries via PR after verifying on a real device (use the Probe button in the app to find candidate keys).",
+  "profiles": [
+    {
+      "id": "samsung",
+      "name": "Samsung Galaxy",
+      "match": { "manufacturer": ["samsung"] },
+      "verified": false,
+      "entries": [
+        { "table": "system", "key": "csc_pref_camera_forced_shuttersound_key", "mute": "0", "restore": "1" }
+      ]
+    }
+  ]
+}

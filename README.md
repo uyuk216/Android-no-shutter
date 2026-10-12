@@ -12,7 +12,16 @@ shell 権限(`MODIFY_AUDIO_ROUTING` を持つ)で `AudioSystem.setForceUse(FOR_S
 2. アプリ内蔵の ADB クライアント(ワイヤレスデバッグ)で、PC・Shizuku なしで実行
 3. 起動時の自動再適用、機種別の動作報告表
 
-## マイルストーン1の試し方
+## インストール
+[Releases](https://github.com/uyuk216/Android-no-shutter/releases) から最新の `NoShutter-vX.Y.Z.apk` をダウンロードしてインストールします。
+アプリでワイヤレスデバッグのペア設定(初回のみ)をしたあと、「無効化」を押します。
+
+## リリース手順(開発者向け)
+`v0.2.0` のようなタグを push すると、GitHub Actions が APK をビルドして Release に添付します。
+署名鍵は Secrets(`SIGNING_KEYSTORE_BASE64` / `SIGNING_STORE_PASSWORD` / `SIGNING_KEY_ALIAS` / `SIGNING_KEY_PASSWORD`)から読みます。
+未設定だとビルドごとに違うデバッグ鍵で署名され、上書き更新できないので、配布前に設定してください。
+
+## PC の adb から試す
 ```sh
 adb install app-debug.apk
 adb shell 'CLASSPATH=$(pm path dev.noshutter | cut -d: -f2) app_process /system/bin dev.noshutter.ShellMain mute'

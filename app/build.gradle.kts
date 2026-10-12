@@ -27,6 +27,7 @@ android {
     }
     kotlinOptions { jvmTarget = "17" }
     buildFeatures { compose = true }
+    packaging { resources.excludes += setOf("META-INF/versions/9/OSGI-INF/MANIFEST.MF", "META-INF/*.version") }
 }
 
 dependencies {
@@ -35,4 +36,8 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.activity:activity-compose:1.9.3")
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.3")
+    // In-app ADB client for Wireless debugging (pairing needs Conscrypt for TLS 1.3)
+    implementation("com.github.MuntashirAkon:libadb-android:3.1.1")
+    implementation("org.conscrypt:conscrypt-android:2.5.3")
+    implementation("org.bouncycastle:bcpkix-jdk15to18:1.81")
 }

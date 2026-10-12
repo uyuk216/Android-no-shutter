@@ -20,6 +20,17 @@ adb shell 'CLASSPATH=$(pm path dev.noshutter | cut -d: -f2) app_process /system/
 ```
 `FOR_SYSTEM=0` なら強制解除、`11` なら強制中です。ColorOS(OPPO/OnePlus/realme)は、開発者オプションの「権限監視を無効にする」が必要な場合があります。
 
+## ローカル開発
+```sh
+git clone https://github.com/uyuk216/Android-no-shutter
+cd Android-no-shutter
+git checkout claude/prototype-audio-forceuse
+```
+1. Android Studio(JDK 17 同梱)でフォルダを開く。SDK は Platform 35 を入れる。
+2. Gradle Wrapper が未生成なので、一度だけ `gradle wrapper --gradle-version 8.10.2` を実行する(Android Studio の同期でも可)。
+3. 実機を USB デバッグで接続し、`./gradlew installDebug` で入れる。
+4. 上の「マイルストーン1の試し方」のコマンドで動作を確認する。
+
 ## 謝辞
 同じ方式を実装している [soralis0912/ShutterSoundToggle](https://github.com/soralis0912/ShutterSoundToggle)(NYSL)を参考にしています。
 

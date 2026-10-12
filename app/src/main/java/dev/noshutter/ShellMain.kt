@@ -26,8 +26,8 @@ object ShellMain {
 
         when (args.firstOrNull()) {
             "mute" -> apply(ForceUse.FORCE_NONE)
-            "restore" -> apply(ForceUse.FORCE_SYSTEM_ENFORCED)
-            "default" -> apply(ForceUse.deviceDefault())
+            // Restore to what this device would choose itself, not a hard-coded "enforced".
+            "restore", "default" -> apply(ForceUse.deviceDefault())
             "get" -> {}
             else -> { println("usage: get|mute|restore|default"); exitProcess(2) }
         }

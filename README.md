@@ -18,6 +18,9 @@ adb install app-debug.apk
 adb shell 'CLASSPATH=$(pm path dev.noshutter | cut -d: -f2) app_process /system/bin dev.noshutter.ShellMain mute'
 adb shell 'CLASSPATH=$(pm path dev.noshutter | cut -d: -f2) app_process /system/bin dev.noshutter.ShellMain restore'
 ```
+root 端末では、端末上のターミナルで同じコマンドを `su -c '...'` で実行しても動きます。
+`restore` は端末本来の状態(強制する端末なら `11`、しない端末なら `0`)に戻します。
+
 `FOR_SYSTEM=0` なら強制解除、`11` なら強制中です。ColorOS(OPPO/OnePlus/realme)は、開発者オプションの「権限監視を無効にする」が必要な場合があります。
 
 ## ローカル開発
